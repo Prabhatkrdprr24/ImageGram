@@ -1,5 +1,17 @@
+import { createPostService } from "../services/postServices.js";
+
 export async function createPost(req, res){
-    // call the service layer function
     console.log(req.file);
-    return res.json({ message: "Post created successfully" });
+
+    const post = await createPostService({
+        caption: req.body.caption,
+        image: req.file.location,
+        // user: req.user
+    });
+
+    return res.status(201).json({
+        success: true,
+        message: "Post created successfully",
+        data: post
+    })
 }

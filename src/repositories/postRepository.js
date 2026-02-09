@@ -1,11 +1,11 @@
 import Post from "../schema/post.js";
 
-export const createPost = async (caption, image, user) => {
+export const createPostRepo = async (caption, image, user) => {
     try{
         const newPost = await Post.create({
             caption: caption,
             image: image,
-            user: user._id
+            // user: user
         });
         return newPost;
     }

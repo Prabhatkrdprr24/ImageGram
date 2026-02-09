@@ -1,9 +1,10 @@
-export const createPost = async(createPostObject) => {
-    //1. Take the image of the post and upload it to cloudinary
+import { createPostRepo } from "../repositories/postRepository.js";
 
-    //2. Get the url of the image from the cloudinary response
+export const createPostService = async(createPostObject) => {
+    const caption = createPostObject.caption?.trim();
+    const image = createPostObject.image;
+    // const user = createPostObject.user;
 
-    //3. Create a new post in the database with the caption, image url and user id
-
-    //4. Return the created post
+    const post = await createPostRepo(caption, image);
+    return post;
 }
