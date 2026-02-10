@@ -14,13 +14,28 @@ export const createPostRepo = async (caption, image, user) => {
     }
 }
 
-export const findAllPosts = async () => {
+export const findAllPosts = async (limit, offset) => {
     try{
-        const posts = await Post.find({});
+        const posts = (await Post.find()).sort({ createdAt: -1 }).skip(offset).limit(limit);
         return posts;
     }
     catch(error){
         console.error("Error finding all posts:", error);
+    }
+}
+
+export const countAllPosts = async () => {
+    try{
+        const totalPosts = await Post.countDocuments();
+        return totalPosts;
+    }
+    catch(error){
+        console.error("Error counting all posts:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to count posts",
+            error: error.message
+        });
     }
 }
 
