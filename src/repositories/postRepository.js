@@ -16,7 +16,7 @@ export const createPostRepo = async (caption, image, user) => {
 
 export const findAllPosts = async (limit, offset) => {
     try{
-        const posts = (await Post.find()).sort({ createdAt: -1 }).skip(offset).limit(limit);
+        const posts = await Post.find().sort({ createdAt: -1 }).skip(offset).limit(limit);
         return posts;
     }
     catch(error){
@@ -56,5 +56,15 @@ export const deletePostById = async (postId) => {
     }   
     catch(error){
         console.error("Error deleting post by ID:", error);
+    }
+}
+
+export const updatePostById = async (id, updateObject) => {
+    try{
+        const updatedPost = await Post.findByIdAndUpdate(id, updateObject, { new: true });
+        return updatedPost;
+    }
+    catch(error){
+        console.log(error);
     }
 }

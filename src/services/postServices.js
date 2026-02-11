@@ -1,5 +1,7 @@
 import { createPostRepo } from "../repositories/postRepository.js";
 import { findAllPosts, countAllPosts } from "../repositories/postRepository.js";
+import { deletePostById } from "../repositories/postRepository.js";
+import { updatePostById } from "../repositories/postRepository.js";
 
 export const createPostService = async(createPostObject) => {
     const caption = createPostObject.caption?.trim();
@@ -22,4 +24,27 @@ export const getAllPostsService = async (limit, offset) => {
         totalDocuments,
         totalPages
     }
+}
+
+export const deletePostService = async (postId) => {
+    try{
+        const response = await deletePostById(postId);
+        return response;
+    }
+    catch(error){
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Service error",
+            success: false
+        });
+    }
+}
+
+export const updatePostService = async (id, updateObject) => {
+    // Implement logic to delete old image uploaded on aws
+    
+
+    const response = await updatePostById(id, updateObject);
+    return response;
+   
 }
