@@ -1,7 +1,8 @@
-import { createPostRepo } from "../repositories/postRepository.js";
+import { createPostRepo, findPostById } from "../repositories/postRepository.js";
 import { findAllPosts, countAllPosts } from "../repositories/postRepository.js";
 import { deletePostById } from "../repositories/postRepository.js";
 import { updatePostById } from "../repositories/postRepository.js";
+import deleteAwsFile from "../services/deleteAwsFile.js";
 
 export const createPostService = async(createPostObject) => {
     const caption = createPostObject.caption?.trim();
@@ -29,6 +30,11 @@ export const getAllPostsService = async (limit, offset) => {
 export const deletePostService = async (postId) => {
     try{
         const response = await deletePostById(postId);
+        if(response){
+            console.log("Post deleted successfully print in service", response);
+            await deleteAwsFile(response.image);
+            console.log("File deleted from AWS S3 successfully print in service");
+        }
         return response;
     }
     catch(error){
@@ -42,7 +48,13 @@ export const deletePostService = async (postId) => {
 
 export const updatePostService = async (id, updateObject) => {
     // Implement logic to delete old image uploaded on aws
-    
+    if(updateObject.image){
+        const existingPost = await findPostById(id);
+        if(existingPost && existingPost.image){
+            await deleteAwsFile(existingPost.image);
+            console.log("Old file deleted from AWS S3 successfully print in service");
+        }
+    }
 
     const response = await updatePostById(id, updateObject);
     return response;
