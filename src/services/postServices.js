@@ -29,6 +29,10 @@ export const getAllPostsService = async (limit, offset) => {
 
 export const deletePostService = async (postId) => {
     try{
+        const post = await findPostById(postId);
+        if(!post){
+            throw new Error("Post not found");
+        }
         const response = await deletePostById(postId);
         if(response){
             console.log("Post deleted successfully print in service", response);
