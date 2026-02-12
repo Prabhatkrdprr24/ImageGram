@@ -14,3 +14,13 @@ export const generateJwtToken = async (email) => {
         throw error;
     }
 }
+
+export const verifyJwtToken = async (token) => {
+    try{
+        const decodedToken = await jwt.verify(token, JWT_SECRET);
+        return decodedToken;
+    }
+    catch(error){
+        throw error;
+    }
+}

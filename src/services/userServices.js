@@ -55,3 +55,13 @@ export const signinUserService = async (email, password) => {
         throw error;
     }
 }
+
+export const checkIfUserExists = async (email) => {
+    try{
+        const user = await findUserByEmail(email);
+        return user;
+    }
+    catch(error){
+        throw error;
+    }
+}
