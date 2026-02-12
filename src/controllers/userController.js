@@ -1,4 +1,5 @@
 import { registerUserService } from "../services/userServices.js";
+import { signinUserService } from "../services/userServices.js";
 
 export async function getProfile(req, res){
     // return umimplemented error
@@ -42,6 +43,27 @@ export const signup = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to signup",
+            error: error.message
+        })
+    }
+}
+
+export async function signin(req, res){
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const token = await signinUserService(email, password);
+        return res.status(200).json({
+            success: true, 
+            message: "User signed in successfully", 
+            token: token 
+        });
+    }
+    catch(error){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to signin",
             error: error.message
         })
     }
