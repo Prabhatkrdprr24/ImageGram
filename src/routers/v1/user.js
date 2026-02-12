@@ -7,12 +7,12 @@ import { authUser } from '../../middleware/authUser.js';
 
 const userRouter = express.Router();
 
-import multer from 'multer';
+// import multer from 'multer';
 import { zodSignupSchema } from '../../validators/zodSignupSchema.js';
-const upload = multer();
+// const upload = multer();
 
 userRouter.get("/profile", getProfile);
-userRouter.post("/signup", upload.none(), validate(zodSignupSchema), signup);
-userRouter.post("/signin", upload.none(), validate(zodSigninSchema), signin);
+userRouter.post("/signup", validate(zodSignupSchema), signup);
+userRouter.post("/signin", validate(zodSigninSchema), signin);
 
 export default userRouter;

@@ -14,7 +14,7 @@ export async function createPost(req, res){
     const post = await createPostService({
         caption: req.body.caption,
         image: req.file.location,
-        // user: req.user
+        user: req.user
     });
 
     return res.status(201).json({
@@ -52,14 +52,7 @@ export async function getAllPosts(req, res){
 export async function deletePost(req, res){
     try{
         const postId = req.params.id;
-        const response = await deletePostService(postId);
-
-        if(!response){
-            return res.status(404).json({
-                success: false,
-                message: "Post not found"
-            });
-        }
+        const response = await deletePostService(postId, req.user);
 
         return res.status(200).json({
             success: true,

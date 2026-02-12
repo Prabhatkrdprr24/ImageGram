@@ -4,7 +4,7 @@ import { checkIfUserExists } from '../services/userServices.js';
 export const authUser = async (req, res, next) => {
     try{
         const token = req.headers['x-access-token'];
-        console.log("header in authUser middleware", token);
+        console.log("header in authUser middleware", req.headers);
         if(!token){
             throw {
                 status: 401,

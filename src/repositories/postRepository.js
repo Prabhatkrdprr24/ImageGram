@@ -1,22 +1,27 @@
 import Post from "../schema/post.js";
 
-export const createPostRepo = async (caption, image, user) => {
+export const createPostRepo = async (caption, image, userObject) => {
     try{
         const newPost = await Post.create({
             caption: caption,
             image: image,
-            // user: user
+            user: userObject._id
         });
         return newPost;
     }
     catch(error){
-        console.error("Error creating post:", error);
+        throw error;
     }
 }
 
 export const findAllPosts = async (limit, offset) => {
     try{
-        const posts = await Post.find().sort({ createdAt: -1 }).skip(offset).limit(limit);
+        const posts = await Post.find()
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .populate("user", "-password");
+
         return posts;
     }
     catch(error){
@@ -41,7 +46,7 @@ export const countAllPosts = async () => {
 
 export const findPostById = async (postId) => {
     try{
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate("user", "-password");
         return post;
     }
     catch(error){
