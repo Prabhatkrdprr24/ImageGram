@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/serverConfig.js';
 
-export const generateJwtToken = async (email) => {
+export const generateJwtToken = async (email, userRole) => {
     try{
         const token = await jwt.sign(
-            { email: email}, 
+            { email: email, role: userRole}, 
             JWT_SECRET, 
             { expiresIn: "1y" }
         );

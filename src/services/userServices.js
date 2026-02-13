@@ -48,7 +48,7 @@ export const signinUserService = async (email, password) => {
             }
         }
 
-        const token = await generateJwtToken(user.email);
+        const token = await generateJwtToken(user.email, user.role || "user");
         return token;
     }
     catch(error){

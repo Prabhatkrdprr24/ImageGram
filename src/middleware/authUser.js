@@ -30,3 +30,14 @@ export const authUser = async (req, res, next) => {
         throw error;
     }
 }
+
+export const isAdmin = async (req, res, next) => {
+    if(req.user.role !== "admin"){
+        return res.status(403).json({
+            success: false,
+            message: "Unauthorized: Admins only"
+        });
+    }
+
+    next();
+}
