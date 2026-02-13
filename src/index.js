@@ -2,7 +2,9 @@ import express from 'express';
 import connectDB from './config/dbConfig.js';
 import apiRouter from "./routers/apiRouter.js";
 import { authUser } from './middleware/authUser.js';
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerOptions from '../swagger.json' with { type: 'json' };
 
 const PORT = 3000;
 const app = express();
@@ -20,6 +22,9 @@ app.get("/ping", authUser, (req, res) => {
         message: "Pong"
     })
 });
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, () => {
   console.log(`Server running at: http://localhost:${PORT}`);
