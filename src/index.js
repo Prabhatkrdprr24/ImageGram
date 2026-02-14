@@ -6,10 +6,16 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerOptions from '../swagger.json' with { type: 'json' };
 import ip from 'ip';
+import { rateLimit } from 'express-rate-limit';
 
 const PORT = 3000;
 const app = express();
 
+const limiter = rateLimit({
+    windowMs: 0.5 * 60 * 1000, // 30 seconds
+    max: 5, // limit each IP to 5 requests per windowMs
+});
+app.use(limiter); // apply rate limiter to all requests
 
 app.use(express.json());
 app.use(express.text());
