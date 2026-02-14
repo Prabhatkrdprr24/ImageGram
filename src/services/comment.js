@@ -13,13 +13,7 @@ export const createCommentService = async (onModal, content, id, userMail) => {
             }
         }
 
-        const commentData = await createComment({
-            content: content,
-            onModel: onModal,
-            commentableId: id,
-            user: user._id
-        });
-
+        let commentData = null;
         if(onModal === "Comment"){
             const comment = await findCommentById(id);
             if(!comment){
@@ -28,9 +22,15 @@ export const createCommentService = async (onModal, content, id, userMail) => {
                     message: "Comment not found"
                 }
             }
-
-           comment.reply.push(commentData._id);
-           await comment.save(); 
+        
+            commentData = await createComment({
+                content: content,
+                onModel: onModal,
+                commentableId: id,
+                user: user._id
+            });
+            comment.reply.push(commentData._id);
+            await comment.save(); 
         }
         else if(onModal === "Post"){
             const post = await findPostById(id);
@@ -41,6 +41,12 @@ export const createCommentService = async (onModal, content, id, userMail) => {
                 }
             }
 
+            commentData = await createComment({
+                content: content,
+                onModel: onModal,
+                commentableId: id,
+                user: user._id
+            });
             post.comments.push(commentData._id);
             await post.save();
         }
