@@ -65,3 +65,13 @@ const fetchCommentParent = async (onModel, commentableId) => {
         throw error;
     }
 }
+
+export const findCommentByIdService = async (commentId) => {
+    try{
+        const comment = await findCommentById(commentId);
+        return comment;
+    }
+    catch(error){
+        throw error;
+    }
+}

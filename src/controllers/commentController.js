@@ -1,4 +1,5 @@
 import { createCommentService } from "../services/comment.js";
+import { findCommentByIdService } from "../services/comment.js";
 
 export const commentController = async (req, res) => {
     try{
@@ -37,6 +38,24 @@ export const postController = async (req, res) => {
             message: "Comment on post created successfully",
             comment: comment
         })
+    }
+    catch(error){
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || "Internal Server Error"
+        })
+    }
+}
+
+export const getCommentById = async (req, res) => {
+    try{
+        const commentId = req.params.commentId;
+
+        const comment = await findCommentByIdService(commentId);
+        return res.status(200).json({
+            success: true,
+            comment: comment
+        });
     }
     catch(error){
         return res.status(error.status || 500).json({
