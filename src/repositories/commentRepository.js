@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import Comment from "../schema/comment.js";
 
 export const createComment = async (commentData) => {
@@ -12,7 +13,7 @@ export const createComment = async (commentData) => {
 
 export const findCommentById = async (commentId) => {
     try{
-        const comment = await Comment.findById(commentId);
+        const comment = await Comment.findById(commentId).populate("reply");
         return comment;
     }   
     catch(error){
