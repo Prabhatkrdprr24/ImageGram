@@ -15,7 +15,14 @@ const post = new mongoose.Schema({
         // required: [true, "Caption is required"],
         maxLength: 200
     },
-
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+    }],
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Like"
+    }]
 }, {timestamps: true});
 
 const Post = mongoose.model("Post", post);
