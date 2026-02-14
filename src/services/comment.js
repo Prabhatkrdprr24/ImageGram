@@ -13,48 +13,55 @@ export const createCommentService = async (onModal, content, id, userMail) => {
             }
         }
 
-        let commentData = null;
-        if(onModal === "Comment"){
-            const comment = await findCommentById(id);
-            if(!comment){
-                throw {
-                    status: 404,
-                    message: "Comment not found"
-                }
+        let parent = await fetchCommentParent(onModal, id);
+        if(!parent){
+            throw {
+                status: 404,
+                message: `${onModal} not found`
             }
-        
-            commentData = await createComment({
-                content: content,
-                onModel: onModal,
-                commentableId: id,
-                user: user._id
-            });
-            comment.reply.push(commentData._id);
-            await comment.save(); 
-        }
-        else if(onModal === "Post"){
-            const post = await findPostById(id);
-            if(!post){
-                throw {
-                    status: 404,
-                    message: "Post not found"
-                }
-            }
-
-            commentData = await createComment({
-                content: content,
-                onModel: onModal,
-                commentableId: id,
-                user: user._id
-            });
-            post.comments.push(commentData._id);
-            await post.save();
         }
 
-        return commentData;
+        const newComment = await createComment({
+            content,
+            user: user._id,
+            onModel: onModal,
+            commentableId: id
+        });
+        await addChildCommentToParent(onModal, parent, newComment);
+        return newComment;
     }
     catch(error){
         throw error;
     }
 }
 
+const addChildCommentToParent = async (onModel, parent, comment) => {
+    try{
+        if(onModel === "Comment"){
+            parent.reply.push(comment._id);
+        }
+        else if(onModel === "Post"){
+            parent.comments.push(comment._id);
+        }
+        await parent.save();
+    }
+    catch(error){
+        throw error;
+    }
+}
+
+const fetchCommentParent = async (onModel, commentableId) => {
+    try{
+        let parent;
+        if(onModel === "Comment"){
+            parent = await findCommentById(commentableId);
+        }
+        else if(onModel === "Post"){
+            parent = await findPostById(commentableId);
+        }
+        return parent;
+    }
+    catch(error){
+        throw error;
+    }
+}
