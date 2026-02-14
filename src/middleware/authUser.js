@@ -4,7 +4,7 @@ import { checkIfUserExists } from '../services/userServices.js';
 export const authUser = async (req, res, next) => {
     try{
         const token = req.headers['x-access-token'];
-        console.log("header in authUser middleware", req.headers);
+        // console.log("header in authUser middleware", req.headers);
         if(!token){
             throw {
                 status: 401,
@@ -13,7 +13,7 @@ export const authUser = async (req, res, next) => {
         }
 
         const decodedToken = await verifyJwtToken(token);
-        console.log("decoded token in authUser middleware", decodedToken);
+        // console.log("decoded token in authUser middleware", decodedToken);
 
         const doesUserExist = await checkIfUserExists(decodedToken.email);
         if(!doesUserExist){
